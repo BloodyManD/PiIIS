@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'bert_classifier/style.css' %}">
+
+{% if tasks_list %}
+  <div id="menu-container">
+    <select id="taskDropdown">
+      {% for task in tasks_list %}
+        {% if task.task_name == "Text Classification" %}
+          <option data-url="{% url 'bert_classifier:detail' task.id %}">{{ task.task_name }}</option>
+        {% endif %}
+        {% if task.task_name == "Dialog Bot" %}
+          <option data-url="{% url 'dialog_bot:detail' task.id %}">{{ task.task_name }}</option>
+        {% endif %}
+        {% if task.task_name == "Image" %}
+          <option data-url="{% url 'image_classification:detail' task.id %}">{{ task.task_name }}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+
+    <br>
+
+    <button onclick="goToSelectedTask()">Перейти</button>
+  </div>
+
+  <script>
+    function goToSelectedTask() {
+      var dropdown = document.getElementById("taskDropdown");
+      var selectedOption = dropdown.options[dropdown.selectedIndex];
+      var url = selectedOption.getAttribute("data-url");
+      window.location.href = url;
+    }
+  </script>
+{% else %}
+  <p>Нет доступных сервисов</p>
+{% endif %}
+
+{% endblock %}
